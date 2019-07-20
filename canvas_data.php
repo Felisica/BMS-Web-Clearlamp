@@ -210,6 +210,7 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 		$tablename = $headerjson->{"name"};
 		$tablesymbol = $headerjson->{"symbol"};
 		$data_url = $headerjson->{"data_url"};
+		$level_order = $headerjson->{"level_order"};
 	}
 	
 	//songdata.json
@@ -247,7 +248,7 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 		if(!in_array($song->{"level"}, $levelarr))
 			$levelarr[] = $song->{"level"};
 	}
-	natsort($levelarr);
+	//natsort($levelarr); #sort
 	$levelarr=array_reverse($levelarr);
 	
 	

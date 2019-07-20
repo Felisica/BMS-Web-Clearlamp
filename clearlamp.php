@@ -92,7 +92,7 @@
 							<option value="">────────SP / 7keys────────</option>
 						    <option value="http://www.ribbit.xyz/bms/tables/insane.html">発狂BMS難易度表</option>
 						    <option value="http://www.ribbit.xyz/bms/tables/normal.html">通常難易度表</option>
-						    <option value="http://www.ribbit.xyz/bms/tables/overjoy.html">Overjoy</option>
+						    <option value="http://lr2.sakura.ne.jp/overjoy.php">Overjoy</option>
 						    <option value="http://www.ribbit.xyz/bms/tables/genocideproposal.html">GENOCIDE新規提案一覧表</option>
 						    <option value="http://flowermaster.web.fc2.com/lrnanido/gla/LN.html">LN難易度</option>
 						    <option value="http://bmsnormal2.syuriken.jp/table.html">第2通常難易度表</option>
@@ -114,10 +114,14 @@
 						    <option value="http://kspinbms.web.fc2.com/insanetable.html">K-SPIN発狂難易度表</option>
 						    <option value="http://lxrlr.web.fc2.com/overjoykz.html">Overjoy勝手に改造</option>
 							<option value="http://kusefumen.web.fc2.com/kuse/kuse_nannido.html">癖譜面コレクション(仮)</option>
+							<option value="http://rattoto10.web.fc2.com/kusekore_sub/list_sample.html">癖譜面コレクション(サブ)</option>
 							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=easy">発狂BMS難度推定表 EASY</option>
 							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=normal">発狂BMS難度推定表 NORMAL</option>
 							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=hard">発狂BMS難度推定表 HARD</option>
 							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=fc">発狂BMS難度推定表 FC</option>
+							<option value="http://kyotokara306km.at-ninja.jp/table2.html">迷子のやどりぎ表</option>
+							<option value="http://oneeighth.web.fc2.com/galaxy/list_sample.html">galaxy難易度表</option>
+							<option value="http://fuki1755.sitemix.jp/fox_table/fox_table.html">Σ：3 」 ∠ )ﾐ⌒ゞ難易度表</option>
 						    <option value="">────────DP / 14keys────────</option>
 						    <option value="http://dpbmsdelta.web.fc2.com/table/insane.html">発狂DP難易度表</option>
 						    <option value="http://dpbmsdelta.web.fc2.com/table/dpdelta.html">δ難易度表</option>
