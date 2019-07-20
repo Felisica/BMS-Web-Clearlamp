@@ -1,4 +1,5 @@
 <?php
+	error_reporting(E_ALL & ~E_NOTICE);
 	require('canvas_data.php');
 	require('create_table.php');
 ?>
@@ -11,6 +12,7 @@
 		<meta name="twitter:site" content="@xxyzzzzz" />
 		<meta name="twitter:title" content="BMS ClearLamp" />
 		<meta name="twitter:description" content="<?php echo $tablename." ".strtoupper($mode)." LAMP"; if(!empty($playername)) echo " (".$playername.")";?>" />
+		<meta name="robots" content="noindex,nofollow,noarchive">
 		
 		<script type="text/javascript" src="js/canvasjs.min.js"></script>
 		<script type="text/javascript" src="js/classie.js"></script>
@@ -25,34 +27,36 @@
 		
 		<style>
 			<?php $rancol = randomcolor();?>
+			
 			.lamp_header {
-				background-color:<?=$rancol?>;
+				background-color: <?php echo $rancol;?>
 			}
 			.ha-header-front form select option{
-				background-color:<?=$rancol?>;
+				background-color: <?php echo $rancol;?>
 			}
 			#formbutton:hover{
-				color: <?=$rancol?>;
+				color: <?php echo $rancol;?>
 			}
 			#imageexport a:hover{
-				color: <?=$rancol?>;
+				color: <?php echo $rancol;?>
 			}
 			#modeselect input[type="radio"]:checked + label {
 				background: white;
-				color: <?=$rancol?>;
+				color: <?php echo $rancol;?>
 			}
 			#modeselect label:hover {
 				background: white;
-				color: <?=$rancol?>;
+				color: <?php echo $rancol;?>
 			}
 		</style>
+		
 	</head>
 	
 	<body>
 		<header id="lamp_header" class="lamp_header">
 			<div class="ha-header-front">
 				
-				<h1 id='tablename'><span><?=$tablename?> ClearLamp</span></h1>
+				<?php echo "<h1 id='tablename'><span>".$tablename." ClearLamp</span></h1>"; ?>
 				
 				<?php
 					if(!empty($playername))
@@ -64,7 +68,7 @@
 					}
 				?>
 				
-				<form name="LR2IDForm" method="GET" action="clearlamp">
+				<form name="LR2IDForm" method="GET" action="clearlamp.php">
 					<button id="formbutton">OK</button>
 					<div class="leftdiv">
 						<label for="lr2ID">
@@ -79,7 +83,7 @@
 					<div class="leftdiv">
 						<label for="urlselect">	URL:</label>
 						<select id="urlselect" class="urlselect" onchange="this.nextElementSibling.value=this.value, this.form.submit()">
-							<option value=" <?=$table_url?>">
+							<option value=" <?php echo $table_url ;?>">
 								<?php 
 									if(empty($tablename) ===FALSE){echo $tablename;}
 									else {echo "Select Table";}
@@ -299,6 +303,12 @@
 					top: 50
 				});
     		}
+    		
+			//chart image export
+			$("#download").click(function() {
+				var image = $(".canvasjs-chart-canvas")[0].toDataURL("imgae/png").replace("image/png", "image/octet-stream");
+				var filename = '<?php echo $tablename;?> CLEAR LAMP (Player：<?php echo $playername;?>).png';				$(this).attr("href", image).attr("download", filename);
+			});
 			
 			//filter tds
 			$("#filter").change(function() {
@@ -381,12 +391,6 @@
 				});
 			}
 			
-    		function imagefiledownload() {
-    			var canvas = document.getElementsByClassName("canvasjs-chart-canvas");
-    			var img = canvas[0].toDataURL("image/png").replace("image/png", "image/octet-stream");
-    			document.getElementById('download').setAttribute("href", img)
-    		}
-    		
     		function resizeh1() {
     			var winwidth = Math.max($(window).width(), 800);
     			var h2width = $('#playername').width();
@@ -435,14 +439,7 @@
 				init();
 			
 			})();
-			
-			//google analytics
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-			ga('create', 'UA-51935531-1', 'auto');
-			ga('send', 'pageview');
+
 		</script>
 	</body>
 </html>
