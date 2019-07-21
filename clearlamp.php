@@ -1,7 +1,11 @@
 <?php
 	error_reporting(E_ALL & ~E_NOTICE);
+	require('misc.php');
 	require('canvas_data.php');
 	require('create_table.php');
+
+	$file = "tables.json";
+	$json = json_decode(file_get_contents($file), true);
 ?>
 
 <!DOCTYPE HTML>
@@ -13,61 +17,69 @@
 		<meta name="twitter:title" content="BMS ClearLamp" />
 		<meta name="twitter:description" content="<?php echo $tablename." ".strtoupper($mode)." LAMP"; if(!empty($playername)) echo " (".$playername.")";?>" />
 		<meta name="robots" content="noindex,nofollow,noarchive">
-		
+
 		<script type="text/javascript" src="js/canvasjs.min.js"></script>
-		<script type="text/javascript" src="js/classie.js"></script>
+		<!--<script type="text/javascript" src="js/classie.js"></script>-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
 		<script type="text/javascript" src="js/range.js"></script>
 		<script type="text/javascript" src="js/jquery.stickybar.min.js"></script>
-		
+
 		<link href="style.css" rel="stylesheet" type="text/css">
-		
-		<title><?php echo $tablename." ".strtoupper($mode)." LAMP"; if(!empty($playername)) echo " (".$playername.")";?></title>
-		
+
+		<title><?php echo $tablename." ".strtoupper($mode)." LAMP"; if(!empty($playername)) echo " (".$playername.")"; ?></title>
+
 		<style>
-			<?php $rancol = randomcolor();?>
-			
+			<?php
+			$defcol = randomcolor();
+			$rancol = rgbcss($defcol);
+			$highcol = rgbcss(highsaturation($defcol));
+			?>
+
 			.lamp_header {
-				background-color: <?php echo $rancol;?>
+				background-color: <?php echo $rancol; ?>
 			}
-			.ha-header-front form select option{
-				background-color: <?php echo $rancol;?>
+			.ha-header-front form select > *{
+				background-color: <?php echo $rancol; ?>
+			}
+			.ha-header-front form select option[selected]{
+				font-weight: bold;
+				background-color: <?php echo $highcol; ?> !impotant
 			}
 			#formbutton:hover{
-				color: <?php echo $rancol;?>
+				color: <?php echo $rancol; ?>
 			}
 			#imageexport a:hover{
-				color: <?php echo $rancol;?>
+				color: <?php echo $rancol; ?>
 			}
 			#modeselect input[type="radio"]:checked + label {
 				background: white;
-				color: <?php echo $rancol;?>
+				color: <?php echo $rancol; ?>
 			}
 			#modeselect label:hover {
 				background: white;
-				color: <?php echo $rancol;?>
+				color: <?php echo $rancol; ?>
 			}
 		</style>
-		
 	</head>
-	
+
 	<body>
 		<header id="lamp_header" class="lamp_header">
 			<div class="ha-header-front">
-				
-				<?php echo "<h1 id='tablename'><span>".$tablename." ClearLamp</span></h1>"; ?>
-				
-				<?php
-					if(!empty($playername))
-						echo "<h2 id='playername'>Player: <a target='_blank' href='http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=mypage&playerid=".$lr2ID."'>".$playername." (".$lr2ID.")"."</a></h2>";
-					if(empty($lr2ID)===FALSE &&  $html !== FALSE) {
-						echo '<div id="imageexport">
-								<a class="shrinkbutton" id="download" href="#" download="'.$tablename." ".strtoupper($mode)." LAMP (Player:".$playername.').png">Save as PNG</a>
-							</div>';
-					}
-				?>
-				
+				<div class="ha-header-top">
+					<h1 id='tablename'><span><?php echo $tablename; ?> ClearLamp</span></h1>
+
+					<?php
+						if(!empty($playername))
+							echo "<h2 id='playername'>Player: <a target='_blank' href='http://www.dream-pro.info/~lavalse/LR2IR/search.cgi?mode=mypage&playerid=".$lr2ID."'>".$playername." (".$lr2ID.")"."</a></h2>";
+						if(empty($lr2ID)===FALSE && $html !== FALSE) {
+							echo '<div id="imageexport">
+									<a class="shrinkbutton" id="download" href="#" download="'.$tablename." ".strtoupper($mode)." LAMP (Player:".$playername.').png">Save as PNG</a>
+								</div>';
+						}
+					?>
+				</div>
+
 				<form name="LR2IDForm" method="GET" action="clearlamp.php">
 					<button id="formbutton">OK</button>
 					<div class="leftdiv">
@@ -76,67 +88,47 @@
 						</label>
 						<input type="text" name="lr2ID" id="lr2ID" pattern="[0-9]{0,6}" value="<?php echo $lr2ID; ?>">
 						<div id="modeselect" class="">
-							<input type="radio" id="clear" name="mode" value="clear" checked <?php if(strcmp($mode, "clear") === 0) echo "checked"; ?>><label for="clear" class="toggle-btn">Clear</label>
+							<input type="radio" id="clear" name="mode" value="clear" <?php if(strcmp($mode, "clear") === 0) echo "checked"; ?>><label for="clear" class="toggle-btn">Clear</label>
 							<input type="radio" id="judge" name="mode" value="judge" <?php if(strcmp($mode, "judge") === 0) echo "checked"; ?>><label for="judge" class="toggle-btn">Judgement</label>
 						</div>
 					</div>
 					<div class="leftdiv">
 						<label for="urlselect">	URL:</label>
 						<select id="urlselect" class="urlselect" onchange="this.nextElementSibling.value=this.value, this.form.submit()">
-							<option value=" <?php echo $table_url ;?>">
-								<?php 
-									if(empty($tablename) ===FALSE){echo $tablename;}
-									else {echo "Select Table";}
+							<option value="" <?php if(empty($tablename)!==FALSE){echo 'selected';} ?> disabled>Select Table...</option>
+							<?php
+								$table_included = FALSE;
+								foreach($json as $key => $value){
+									if(empty($value['fullname'])===FALSE){
+							?>
+										<optgroup label="<?php echo $value['fullname']; ?>">
+											<?php
+												foreach($value['tables'] as $tables_key => $tables_value){
+													if($tables_value['url']===$table_url){
+														$table_included = TRUE;
+											?>
+														<option value="<?php echo $tables_value['url']; ?>" selected><?php echo $tables_value['name']; ?> (Currently selected)</option>
+											<?php
+													}else{
+											?>
+														<option value="<?php echo $tables_value['url']; ?>"><?php echo $tables_value['name']; ?></option>
+											<?php
+													}
+												}
+											?>
+										</optgroup>
+							<?php
+									}
+								}
+							?>
+							<optgroup label="Custom URL">
+								<?php
+									if($table_included!==TRUE && empty($tablename)===FALSE){
+										echo '<option value="'.$table_url.'" selected>'.$tablename.' <small>(Currently selected)</small></option>';
+									}
 								?>
-							</option>
-							<option value="">────────SP / 7keys────────</option>
-						    <option value="http://www.ribbit.xyz/bms/tables/insane.html">発狂BMS難易度表</option>
-						    <option value="http://www.ribbit.xyz/bms/tables/normal.html">通常難易度表</option>
-						    <option value="http://lr2.sakura.ne.jp/overjoy.php">Overjoy</option>
-						    <option value="http://www.ribbit.xyz/bms/tables/genocideproposal.html">GENOCIDE新規提案一覧表</option>
-						    <option value="http://flowermaster.web.fc2.com/lrnanido/gla/LN.html">LN難易度</option>
-						    <option value="http://bmsnormal2.syuriken.jp/table.html">第2通常難易度表</option>
-						    <option value="http://bmsnormal2.syuriken.jp/table_insane.html">第2発狂難易度表</option>
-						    <option value="http://minddnim.web.fc2.com/sara/AllMusic/bms_sara_all.html">皿難易度表</option>
-						    <option value="http://kdiff.web.fc2.com/sptable.html">K BMS TABLE (SP)</option>
-						    <option value="http://www.geocities.jp/vinyl8310/gl/resjoygl.html">resjoy</option>
-						    <option value="http://kinokonohakkyounanido.web.fc2.com/index.html">きのこの難易度表</option>
-						    <option value="http://3228monsta.web.fc2.com/monstajoy.html">MonstaJoy</option>
-						    <option value="http://swamelo.web.fc2.com/01_HK.html">swa倉庫</option>
-						    <option value="http://moriosabun.digi2.jp/morio.HTML">morio難易度表</option>
-						    <option value="http://jakko.web.fc2.com/table.html">jakko難易度表</option>
-						    <option value="http://akred.web.fc2.com/ak-red-new.html">赤い人難易度表</option>
-						    <option value="http://akred.web.fc2.com/baecon-new.html">BAECON難易度表</option>
-						    <option value="http://kspinbms.web.fc2.com/insanetable.html">K-SPIN発狂難易度表</option>
-						    <option value="http://xyzzz.net/objxyz.php">obj.XYZ</option>
-						    <option value="http://hogeeeeeee.ma-jide.com/outsideln.html">LN表外難易度</option>
-						    <option value="http://infinity.s60.xrea.com/bms/gla/">連打難易度表</option>
-						    <option value="http://kspinbms.web.fc2.com/insanetable.html">K-SPIN発狂難易度表</option>
-						    <option value="http://lxrlr.web.fc2.com/overjoykz.html">Overjoy勝手に改造</option>
-							<option value="http://kusefumen.web.fc2.com/kuse/kuse_nannido.html">癖譜面コレクション(仮)</option>
-							<option value="http://rattoto10.web.fc2.com/kusekore_sub/list_sample.html">癖譜面コレクション(サブ)</option>
-							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=easy">発狂BMS難度推定表 EASY</option>
-							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=normal">発狂BMS難度推定表 NORMAL</option>
-							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=hard">発狂BMS難度推定表 HARD</option>
-							<option value="http://walkure.net/hakkyou/for_glassist/bms/?lamp=fc">発狂BMS難度推定表 FC</option>
-							<option value="http://kyotokara306km.at-ninja.jp/table2.html">迷子のやどりぎ表</option>
-							<option value="http://oneeighth.web.fc2.com/galaxy/list_sample.html">galaxy難易度表</option>
-							<option value="http://fuki1755.sitemix.jp/fox_table/fox_table.html">Σ：3 」 ∠ )ﾐ⌒ゞ難易度表</option>
-						    <option value="">────────DP / 14keys────────</option>
-						    <option value="http://dpbmsdelta.web.fc2.com/table/insane.html">発狂DP難易度表</option>
-						    <option value="http://dpbmsdelta.web.fc2.com/table/dpdelta.html">δ難易度表</option>
-						    <option value="http://yuyuyu.soudesune.net/DPgottani/insane2.html">発狂DPBMSごった煮難易度表</option>
-						    <option value="http://kdiff.web.fc2.com/dptable.html">K BMS TABLE (DP)</option>
-						    <option value="">────────PMS / 9keys────────</option>
-						    <option value="http://hiiiii.web.fc2.com/pms/Table.htm">通常PMS難易度表</option>"
-						    <option value="http://stellawingroad.web.fc2.com/new/pms.html">発狂PMS難易度表</option>
-						    <option value="http://stellawingroad.web.fc2.com/new2/pms.html">発狂PMS表外案内所</option>
-						    <option value="http://stellawingroad.web.fc2.com/new3/pms.html">発狂PMS表外案内所隔離枠</option>
-						    <option value="http://stellawingroad.web.fc2.com/new4/pms.html">準発狂PMS難易度表</option>
-						    <option value="http://zatsuzatsupms.yokochou.com/jsonver/jsonindex.html">酸素PMS難易度表</option>
-						    <option value="http://nigo10sabun.web.fc2.com/nigo10json.html">西ヶ蜂難易度表</option>
-						    <option value="http://stellawingroad.web.fc2.com/g2r/pms.html">G2R PMS難易度表</option>
-						    <option value="">────────Custom URL────────</option>
+								<option value="">Custom URL</option>
+							</optgroup>
 						</select>
 						<input type="text" id="table_url" name="table_url" class="urlinput" value="<?php echo $table_url;?>" />
 					</div>
@@ -145,7 +137,7 @@
 		</header>
 		<main class="wrapper">
 			<div id="chartContainer" class="chartdiv"></div>
-			
+
 			<div id="bottomContainer">
 				<div id="sidebar">
 					<div id="filter">
@@ -159,7 +151,7 @@
 							<div class="ck-button"><label>
 								<input type="checkbox" name="char-level" value="charlv" checked/><span>+Char LV</span>
 							</label></div>
-						</div> 
+						</div>
 						<div id="rank-filter" class="filter-div">
 							<h3>RANK</h3>
 							<div class="ck-button"><label>
@@ -213,7 +205,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div id="tableContainer" class="tablediv">
 					<?php
 					//make table
@@ -227,7 +219,7 @@
 					?>
 				</div>
 			</div>
-			
+
 			<!--
 			<div id="twitbuttondiv">
 				<a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a>
@@ -251,12 +243,14 @@
 					else
 						echo 'CanvasJS.addColorSet("pastel", ["#CC0000", "#ffd040", "#BFC1C2", "#CD7F32", "#B0E57C", "#ACD1E9", "#F0F0F0"]);';
 				?>
-				
-    			var chart = new CanvasJS.Chart("chartContainer", <?php echo $datafullstring;?>);
-    			chart.render();
-    			imagefiledownload();
-    			resizeh1();
-				
+
+				if(<?php echo empty($datafullstring) ? "false" : "true" ; ?>){
+					var chart = new CanvasJS.Chart("chartContainer", <?php echo $datafullstring;?>);
+					chart.render();
+				}
+				// imagefiledownload();
+				// resizeh1();
+
 				//tablesorter setting
 				$.tablesorter.addParser({
 						id: 'Clear',
@@ -267,7 +261,7 @@
 							return s.replace(/NOT-PLAYED/,0).replace(/FAILED/,1).replace(/EASY-CLEAR/,2).replace(/HARD-CLEAR/,4).replace(/FULL-COMBO/,5).replace(/CLEAR/,3);
 						},
 						type: 'numeric'
-				});	
+				});
 				$.tablesorter.addParser({
 					id: 'BP',
 					is: function(s) {
@@ -295,29 +289,31 @@
 					headers: {
 						0 : {sorter: false},
 						1 : {sorter: 'LV'},
-						4 : {sorter:'Clear'},
+						4 : {sorter: 'Clear'},
 						6 : {sorter: 'BP'}
 					}
-				}); 
-				
+				});
+
 				range_show();
-				
+
 				//animate sidebar
 				$('#sidebar').stickyBar({
 					top: 50
 				});
-    		}
-    		
+				cbpAnimatedHeader();
+			}
+
 			//chart image export
 			$("#download").click(function() {
 				var image = $(".canvasjs-chart-canvas")[0].toDataURL("imgae/png").replace("image/png", "image/octet-stream");
-				var filename = '<?php echo $tablename;?> CLEAR LAMP (Player：<?php echo $playername;?>).png';				$(this).attr("href", image).attr("download", filename);
+				var filename = '<?php echo $tablename;?> CLEAR LAMP (Player：<?php echo $playername;?>).png';
+				$(this).attr("href", image).attr("download", filename);
 			});
-			
+
 			//filter tds
 			$("#filter").change(function() {
 				$(".song-tr").show();
-				
+
 				var min_lv = parseInt($('input[name="min-level"]').attr('value'));
 				var max_lv = parseInt($('input[name="max-level"]').attr('value'));
 				var char_lv = $('input[name="char-level"]').prop("checked");
@@ -334,7 +330,7 @@
 					}
 				})
 				range_show();
-				
+
 				$('#rank-filter').find('input:not(:checked)').each(function() {
 					var rank = $(this).attr('value');
 					if(rank === "C-F"){
@@ -346,13 +342,13 @@
 						$(".td-".concat(rank)).closest("tr").hide();
 					}
 				});
-			
+
 				$('#clear-filter').find('input:not(:checked)').each(function() {
 					var clear = $(this).attr('value');
 					$(".".concat(clear)).closest("tr").hide();
 				});
 			});
-			
+
 			//checkbox all
 			$("input[value='ALL-RANK']").change(function() {
 				$(".rank-checkbox").prop("checked", $("input[value='ALL-RANK']").prop("checked"));
@@ -362,28 +358,22 @@
 			});
 			$(".rank-checkbox").change(function() {
 				if($(this).attr("value") !== 'ALL-RANK')
-					$("input[value='ALL-RANK']").prop("checked", false);				
+					$("input[value='ALL-RANK']").prop("checked", false);
 			});
 			$(".clear-checkbox").change(function() {
 				if($(this).attr("value") !== 'ALL-CLEAR')
-					$("input[value='ALL-CLEAR']").prop("checked", false);				
+					$("input[value='ALL-CLEAR']").prop("checked", false);
 			});
 			//checkbox noplay
 			$("input[name='noplay']").change(function() {
 				var no_check = $(this).prop("checked");
 				$("input[name='noplay']").prop("checked", no_check);
 			});
-			
-    		
-			
-    		window.onresize = function(event){
-    			resizeh1();
-    		}
-    		
-    		document.getElementById('download').addEventListener('onchange', function() {
-			    imagefiledownload();
-			}, false);
-			
+
+			$('input[type=radio]').on('change', function() {
+				$(this).closest("form").submit();
+			});
+
 			//level range show
 			function range_show() {
 				$('#range-show').html(function() {
@@ -394,55 +384,45 @@
 					return min.concat("~", max);
 				});
 			}
-			
-    		function resizeh1() {
-    			var winwidth = Math.max($(window).width(), 800);
-    			var h2width = $('#playername').width();
-    			$('#tablename').css({'width': (winwidth-h2width-250)+'px'});
-    		};
-    		
-    		$('input[type=radio]').on('change', function() {
-			    $(this).closest("form").submit();
-			});
-    		
-			
+
 			//animate header
-			var cbpAnimatedHeader = (function() {	
+			function cbpAnimatedHeader(){
 				var docElem = document.documentElement,
-					header = document.querySelector( '.lamp_header' ),
-					button = document.querySelector( '.shrinkbutton')
+					header = $('.lamp_header'),
+					button = $('.shrinkbutton')
 					didScroll = false,
 					changeHeaderOn = 10;
-			
+
 				function init() {
 					window.addEventListener( 'scroll', function( event ) {
+						console.log("scrolled");
 						if( !didScroll ) {
 							didScroll = true;
 							setTimeout( scrollPage, 250 );
 						}
 					}, false );
 				}
-			
+
 				function scrollPage() {
 					var sy = scrollY();
 					if ( sy >= changeHeaderOn ) {
-						classie.add( header, 'lamp_header-shrink' );
-						classie.add( button, 'shrinkbutton-shrink');
+						header.addClass('lamp_header-shrink');
+						button.addClass('shrinkbutton-shrink');
 					}
 					else {
-						classie.remove( header, 'lamp_header-shrink' );
-						classie.remove( button, 'shrinkbutton-shrink');
+						header.removeClass('lamp_header-shrink');
+						button.removeClass('shrinkbutton-shrink');
 					}
 					didScroll = false;
 				}
-			
+
 				function scrollY() {
 					return window.pageYOffset || docElem.scrollTop;
 				}
-			
+
 				init();
-			
-			})();
+
+			}
 
 		</script>
 	</body>

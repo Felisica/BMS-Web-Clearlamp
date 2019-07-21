@@ -7,8 +7,8 @@ function add_song($song, $mode, $level, $i)
 		if($i !== 0)
 		{
 			if(strcmp($song->{"level"}, $level) === 0 && strcmp($song->{"clear"}, $i) === 0)
-				return true;
-		} 
+			return true;
+		}
 		else
 		{
 			if(strcmp($song->{"level"}, $level) === 0 && empty($song->{"clear"})){
@@ -61,7 +61,7 @@ function add_song($song, $mode, $level, $i)
 }
 
 //Tooltip용 링크데이터
-function tooltip_string($cleararray) 
+function tooltip_string($cleararray)
 {
 	$linkdata = "<ul class='song_list'>";
 	foreach($cleararray as $clearedsong){
@@ -133,29 +133,27 @@ function get_currentclear($mode, $i, &$indexlabelcolor)
 	return $currentclear;
 }
 function get_time() {
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
+	list($usec, $sec) = explode(" ", microtime());
+	return ((float)$usec + (float)$sec);
 }
 function read_url($url)
 {
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	$data = curl_exec($ch);
+	if($data===FALSE){
+		$errmsg = curl_error($ch);
+		curl_close($ch);
+		throw new Exception($errmsg);
+	}
 	curl_close($ch);
 	return $data;
 }
 
-function randomcolor()
-{
-	$red = intval((mt_rand(0,256)+160)/2);
-	$green = intval((mt_rand(0,256)+160)/2);
-	$blue = intval((mt_rand(0,256)+160)/2);
-	return "rgb(".$red.",".$green.",".$blue.")";
-}
-
 //LR2 cgi
-function get_lr2_cgi($lr2ID) 
+function get_lr2_cgi($lr2ID)
 {
 	return read_url("http://www.dream-pro.info/~lavalse/LR2IR/2/getplayerxml.cgi?id=".$lr2ID);
 }
@@ -173,36 +171,34 @@ if(empty($_GET["mode"]))
 	$mode = 'clear';
 }
 
-if(empty($lr2ID)===FALSE &&  $html !== FALSE)
+if(empty($lr2ID)===FALSE && $html !== FALSE)
 {
-    $start = get_time();
-	
+	$start = get_time();
+
 	$lr2_cgi = get_lr2_cgi($lr2ID);
-	
+
 	//playername, score들 get
 	$playername = get_playername($lr2_cgi);
-	$scorexml = simplexml_load_string(substr($lr2_cgi, 1, strpos($lr2_cgi, rivalname)-2));
-	
+	$scorexml = simplexml_load_string(substr($lr2_cgi, 1, strpos($lr2_cgi, 'rivalname')-2));
+
 	if($scorexml === false) {
 		exit("Unable to get score. <br><a href=\"javascript:history.go(-1)\">GO BACK</a>");
 	}
-	
+
 	//table URL에서 html파싱 후  header.json url get
 	$dom = new DOMDocument();
 	@$dom->loadHTML($html);
 	$header_url;
-	foreach($dom->getElementsByTagName('meta') as $link) 
+	foreach($dom->getElementsByTagName('meta') as $link)
 	{
-        if(strpos($link->getAttribute('content'), "json")!== FALSE)
+		if(strpos($link->getAttribute('content'), "json")!== FALSE)
 		{
 			$header_url = $link->getAttribute('content');
 			if(strpos($header_url, "http") === FALSE)
-				$header_url = substr($table_url, 0, strrpos($table_url, "/")+1).$header_url;
+			$header_url = substr($table_url, 0, strrpos($table_url, "/")+1).$header_url;
 		}
 	}
-	
-	
-	
+
 	//header.json
 	$headerjson = json_decode(trim(trim(read_url($header_url), "\x00..\x1F"), "\x80..\xFF"));
 	if(json_last_error() === JSON_ERROR_NONE)
@@ -211,23 +207,23 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 		$tablesymbol = $headerjson->{"symbol"};
 		$data_url = $headerjson->{"data_url"};
 	}
-	
+
 	//songdata.json
 	if(strpos($data_url, "http") === FALSE)
-		$data_url = substr($header_url, 0, strrpos($header_url, "/")+1).trim($data_url, "./");
+	$data_url = substr($header_url, 0, strrpos($header_url, "/")+1).trim($data_url, "./");
 	$songdata = json_decode($datastring = read_url($data_url));
-	
+
 	if(json_last_error() !== JSON_ERROR_NONE)
 	{
 		$datastring = trim(trim($datastring, "\x00..\x1F"), "\x80..\xFF");
 		$songdata = json_decode( $datastring );
 	}
-	
-    if(count($songdata)===0)
-    {
-    	exit("Unable to open Table <br><a href=\"javascript:history.go(-1)\">GO BACK</a>");
-    }
-    
+
+	if(count($songdata)===0)
+	{
+		exit("Unable to open Table <br><a href=\"javascript:history.go(-1)\">GO BACK</a>");
+	}
+
 	//Level의 목록을 get하고 clear항목을 cgi와 대조해 추가
 	$levelarr = array();
 	$all_level_count = array(0,0,0,0,0,0);
@@ -245,20 +241,20 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 			}
 		}
 		if(!in_array($song->{"level"}, $levelarr))
-			$levelarr[] = $song->{"level"};
+		$levelarr[] = $song->{"level"};
 	}
 	//natsort($levelarr); #sort
 	$levelarr=array_reverse($levelarr);
-	
+
 	$level_int_arr = array_filter($levelarr, "is_numeric");
-    $cleartime = get_time();
-    
+	$cleartime = get_time();
+
 	//canvajs용 데이터 만들기
 	$datafullstring;
 	if($mode === "clear")
-		$numberofLegend = 5;
+	$numberofLegend = 5;
 	else
-		$numberofLegend = 6;
+	$numberofLegend = 6;
 
 	for($i = $numberofLegend; $i>=0; $i--)
 	{
@@ -274,7 +270,7 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 		} else if(count($levelarr) > 30){
 			$label_fontsize = 17;
 		}
-		
+
 		$datastring = "
 		{
 			indexLabelFontSize: ".$indexfontsize.",
@@ -284,17 +280,17 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 			name: '".$currentclear."',
 			dataPoints:
 			[
-				";
-		
+		";
+
 		$all_level_counter = 0;
 
 		foreach($levelarr as $level)
 		{
 			$cleararray = array();
-			
+
 			//songdata를 돌면서 현재 클리어(i)상태인 곡들 cleararray에 추가
 			foreach($songdata as $song) {
-				if(add_song($song, $mode, $level, $i)) 
+				if(add_song($song, $mode, $level, $i))
 				{
 					$cleararray[] = $song;
 				}
@@ -303,45 +299,41 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 			$currlevel_counter = count($cleararray);
 			$all_level_counter +=$currlevel_counter;
 
-			
-
 			if($currlevel_counter > 0)
 			{
 				$linkdata = tooltip_string($cleararray);
 
 				$datastring = $datastring."{y: ".$currlevel_counter.",
-				linkdata: \"".$linkdata."\",
-				count: '".$currlevel_counter."',
-				label: '".$tablesymbol.$level."',
-				indexLabelFontColor: '".$indexlabelcolor."',
-				indexLabel: '".$currlevel_counter."',
-				indexLabelPlacement: 'inside',
+					linkdata: \"".$linkdata."\",
+					count: '".$currlevel_counter."',
+					label: '".$tablesymbol.$level."',
+					indexLabelFontColor: '".$indexlabelcolor."',
+					indexLabel: '".$currlevel_counter."',
+					indexLabelPlacement: 'inside',
 				},";
 			}
-			else 
+			else
 			{
-				$datastring = $datastring."{y: ".$currlevel_counter.",
-				label: \"".$tablesymbol.$level."\"},";
+				$datastring = $datastring."{y: ".$currlevel_counter.", label: \"".$tablesymbol.$level."\"},";
 			}
 		}
 
-		/* 
+		/*
 		//all level 추가
 		if($all_level_counter>0)
 		{
 			$all_level_count[$i] = $all_level_counter;
 			$datastring = $datastring."{y: ".$all_level_counter.",
-			linkdata: \"\",
-			count: \"".$all_level_counter."\",
-			label: \"".$tablesymbol."All"."\",
-			indexLabelFontColor: \"".$indexlabelcolor."\",
-			indexLabel: \"".$all_level_counter."\",
-			indexLabelPlacement: \"inside\",
+				linkdata: \"\",
+				count: \"".$all_level_counter."\",
+				label: \"".$tablesymbol."All"."\",
+				indexLabelFontColor: \"".$indexlabelcolor."\",
+				indexLabel: \"".$all_level_counter."\",
+				indexLabelPlacement: \"inside\",
 			},";
 		}
 		else{
-			$datastring = $datastring."{y: ".$all_level_counter.",
-			label: \"".$tablesymbol."All"."\"},";
+			$datastring = $datastring."{y: ".$all_level_counter.", label: \"".$tablesymbol."All"."\"},";
 		}
 		*/
 
@@ -349,41 +341,42 @@ if(empty($lr2ID)===FALSE &&  $html !== FALSE)
 		$datastring = substr($datastring, 0, strlen($datastring)-1)."]},";
 		$datafullstring .=$datastring;
 	}
-	
-	$all_level_count[0] = count($songdata) - $all_level_count[5] - $all_level_count[4] - $all_level_count[3] - $all_level_count[2] - $all_level_count[1]; 
-	
+
+	$all_level_count[0] = count($songdata) - $all_level_count[5] - $all_level_count[4] - $all_level_count[3] - $all_level_count[2] - $all_level_count[1];
+
 	$datafullstring = "
-    {
-    	title: {
-    		text: \"".$tablename." ".strtoupper($mode)." LAMP (Player: ".$playername.")\",
-    		horizontalAlign: 'left',
-    		fontSize: 25,
-    		fontFamily: \"arial\",
-    	},
-    	backgroundColor: 'white',
-    	animationEnabled: true,
+	{
+		title: {
+			text: \"".$tablename." ".strtoupper($mode)." LAMP (Player: ".$playername.")\",
+			horizontalAlign: 'left',
+			fontSize: 25,
+			fontFamily: \"arial\",
+		},
+		backgroundColor: 'white',
+		animationEnabled: true,
 		animationDuration: 1500,
-    	toolTip: {
-	      	shared: false,
-	      	borderColor: \"black\",
-	      	fontSize: 25,
-	    },
-	    legend:{
-	    	fontSize: 20,
-	    	fontFamily: \"arial\",
-	    	verticalAlign: \"top\",
-	    	horizontalAlign: \"right\",
-		 },
-    	colorSet: \"pastel\",
-    	axisX:{
-    		interval: 1,
-    		labelFontSize: ".$label_fontsize.",
-    	},
-    	axisY:{
-    		interval: 100,
-    		labelFontColor: \"white\",
-    	},
-    	data:[".substr($datafullstring, 0, strlen($datafullstring)-1)."]}";
+		toolTip: {
+			shared: false,
+			borderColor: \"black\",
+			fontSize: 25,
+		},
+		legend:{
+			fontSize: 20,
+			fontFamily: \"arial\",
+			verticalAlign: \"top\",
+			horizontalAlign: \"right\",
+		},
+		colorSet: \"pastel\",
+		axisX:{
+			interval: 1,
+			labelFontSize: ".$label_fontsize.",
+		},
+		axisY:{
+			interval: 100,
+			labelFontColor: \"white\",
+		},
+		data:[".substr($datafullstring, 0, strlen($datafullstring)-1)."]
+	}";
 }
 
 ?>

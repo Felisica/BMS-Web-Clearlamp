@@ -45,7 +45,8 @@ span.not-show {
 	transition: height 0.2s;
 }
 
-.lamp_header h1, h2{
+.lamp_header h1,
+.lamp_header h2{
 	-webkit-transition: font-size 0.2s;
 	-moz-transition: font-size 0.2s;
 	transition: font-size 0.2s;
@@ -65,32 +66,36 @@ span.not-show {
 	height: 800px;
 	margin-bottom: 0px;
 }
-.urldiv {
+/* .urldiv {
 	display: inline-block;
 	float:left;
 	clear: left;
+} */
+.ha-header-top{
+	display: flex;
+	max-width: 100%;
 }
 .ha-header-front h1{
-	display: inline-block;
+	order: -1;
+	flex-grow: 1;
+	flex-shrink: 1;
 	white-space: nowrap;
 	overflow:hidden !important;
 	text-overflow: ellipsis;
 }
 .ha-header-front h2{
-	display: inline-block;
-	float: right;
+	order: 1;
+	flex-grow: 0;
+	flex-shrink: 0;
 	margin-right: 20px;
 }
 .ha-header-front h2 a{
 	color: white;
 }
 .ha-header-front form{
-	display: inline-block;
-	float: left;
-	clear:left;
+	display: block;
 	width: 100%;
 }
-
 .ha-header-front form input, select{
 	background: transparent;
 	color: white;
@@ -109,8 +114,36 @@ span.not-show {
 	width: 200px;
 }
 
+#imageexport {
+	flex-grow: 0;
+	flex-shrink: 0;
+	border: 2px solid white;
+	margin-right: 10px;
+	margin-top: 10px;
+	flex-basis: 120px;
+	align-self: baseline;
+}
+#imageexport a {
+	display: block;
+	text-decoration: none;
+	color: white;
+	font-size: 1.2em;
+	text-align: center;
+	width: 120px;
+	height:35px;
+	padding-top: 10px;
+	-webkit-transition: background 300ms, color 300ms;
+    -moz-transition: background 300ms, color 300ms;
+    -o-transition: background 300ms, color 300ms;
+    transition: background 300ms, color 300ms;
+}
+#imageexport a:hover{
+	background: white;
+}
+
 #lr2ID {
-	width: 60px;
+	width: 6.5ch;
+	text-align: right;
 }
 
 #table_url{
@@ -133,10 +166,47 @@ span.not-show {
     transition: background-color 300ms;
     margin-right: 20px;
 }
-
 #formbutton:hover{
 	background: white;
 }
+
+#modeselect {
+	float: right;
+	margin-right: 40px;
+}
+#modeselect input {
+	position: absolute;
+}
+#modeselect label {
+	font-size: 1.3em;
+	text-align: center;
+	width: 130px;
+	border: 1px solid white;
+	display: inline-block;
+	cursor:pointer;
+	background:inherit;
+	-webkit-transition: background 0.3s, color 0.3s;
+    transition: background 0.3s, color 0.3s;
+}
+#modeselect input {
+	display: none;
+}
+#modeselect label:nth-child(2) {
+	border-radius: 10px 0px 0px 10px;
+	margin-right: -3px;
+}
+#modeselect label:last-child {
+	border-radius: 0px 10px 10px 0px;
+	margin-left: 0px;
+}
+
+
+.shrinkbutton-shrink {
+	padding-top: 4px !important;
+	height: 24px !important;
+	font-size: 1.0em !important;
+}
+
 .canvasjs-chart-tooltip div {
 	max-height: 700px;
 	max-width: 800px;
@@ -168,7 +238,6 @@ span.not-show {
 button[title] {
 	background: transparent;
 	border: 1px solid black !important
-	
 }
 button[title]{
 	cursor: pointer !important;
@@ -257,68 +326,7 @@ td.CF{
 	color: white;
 }
 
-#modeselect {
-	float: right;
-	margin-right: 40px;
-}
-#modeselect input {
-	position: absolute;
-}
-#modeselect label {
-	font-size: 1.3em;
-	text-align: center;
-	width: 130px;
-	border: 1px solid white;
-	display: inline-block;
-	cursor:pointer;
-	background:inherit;
-	-webkit-transition: background 0.3s, color 0.3s;
-    transition: background 0.3s, color 0.3s;
-}
-#modeselect input {
-	display: none;
-}
 
-
-#modeselect label:nth-child(2) {
-	border-radius: 10px 0px 0px 10px;
-	margin-right: -3px;
-}
-#modeselect label:last-child {
-	border-radius: 0px 10px 10px 0px;
-	margin-left: 0px;
-}
-
-#imageexport {
-	float: right;
-	border: 2px solid white;
-	margin-right: 10px;
-	margin-top: 10px;
-	display: inline-block;
-}
-#imageexport a {
-	display: block;
-	text-decoration: none;
-	color: white;
-	font-size: 1.2em;
-	text-align: center;
-	width: 120px;
-	height:35px;
-	padding-top: 10px;
-	-webkit-transition: background 300ms, color 300ms;
-    -moz-transition: background 300ms, color 300ms;
-    -o-transition: background 300ms, color 300ms;
-    transition: background 300ms, color 300ms;
-}
-#imageexport a:hover{
-	background: white;
-}
-
-.shrinkbutton-shrink {
-	padding-top: 4px !important;
-	height: 24px !important;
-	font-size: 1.0em !important;
-}
 
 
 #ScoreTable {

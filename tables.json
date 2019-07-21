@@ -1,0 +1,201 @@
+{
+	"single":{
+		"fullname": "SP / 7keys",
+		"tables": [
+			{
+				"name": "発狂BMS難易度表",
+				"url": "http://www.ribbit.xyz/bms/tables/insane.html"
+			},
+			{
+				"name": "通常難易度表",
+				"url": "http://www.ribbit.xyz/bms/tables/normal.html"
+			},
+			{
+				"name": "Overjoy",
+				"url": "http://lr2.sakura.ne.jp/overjoy.php"
+			},
+			{
+				"name": "LN難易度表",
+				"url": "http://flowermaster.web.fc2.com/lrnanido/gla/LN.html"
+			},
+			{
+				"name": "第2通常難易度表",
+				"url": "http://bmsnormal2.syuriken.jp/table.html"
+			},
+			{
+				"name": "第2発狂難易度表",
+				"url": "http://bmsnormal2.syuriken.jp/table.html"
+			},
+			{
+				"name": "通常皿難易度表",
+				"url": "http://minddnim.web.fc2.com/bms_sara.html"
+			},
+			{
+				"name": "皿難易度表(3rd)",
+				"url": "http://minddnim.web.fc2.com/sara/3rd_hard/bms_sara_3rd_hard.html"
+			},
+			{
+				"name": "K BMS TABLE (SP)",
+				"url": "http://kdiff.web.fc2.com/sptable.html"
+			},
+			{
+				"name": "resjoy",
+				"url": "http://www.geocities.jp/vinyl8310/gl/resjoygl.html"
+			},
+			{
+				"name": "きのこの難易度表",
+				"url": "http://kinokonohakkyounanido.web.fc2.com/index.html"
+			},
+			{
+				"name": "MonstaJoy",
+				"url": "http://3228monsta.web.fc2.com/monstajoy.html"
+			},
+			{
+				"name": "swa倉庫",
+				"url": "http://swamelo.web.fc2.com/01_HK.html"
+			},
+			{
+				"name": "morio難易度表",
+				"url": "http://moriosabun.digi2.jp/morio.HTML"
+			},
+			{
+				"name": "jakko難易度表",
+				"url": "http://jakko.web.fc2.com/table.html"
+			},
+			{
+				"name": "赤い人難易度表",
+				"url": "http://akred.web.fc2.com/ak-red-new.html"
+			},
+			{
+				"name": "BAECON難易度表",
+				"url": "http://akred.web.fc2.com/baecon-new.html"
+			},
+			{
+				"name": "K-SPIN発狂難易度表",
+				"url": "http://kspinbms.web.fc2.com/insanetable.html"
+			},
+			{
+				"name": "obj.XYZ",
+				"url": "http://xyzzz.net/objxyz.php"
+			},
+			{
+				"name": "LN表外難易度",
+				"url": "http://hogeeeeeee.ma-jide.com/outsideln.html"
+			},
+			{
+				"name": "連打難易度表",
+				"url": "http://infinity.s60.xrea.com/bms/gla/"
+			},
+			{
+				"name": "Overjoy勝手に改造",
+				"url": "http://lxrlr.web.fc2.com/overjoykz.html"
+			},
+			{
+				"name": "癖譜面コレクション(仮)",
+				"url": "http://kusefumen.web.fc2.com/kuse/kuse_nannido.html"
+			},
+			{
+				"name": "癖譜面コレクション(サブ)",
+				"url": "http://rattoto10.web.fc2.com/kusekore_sub/list_sample.html"
+			},
+			{
+				"name": "発狂BMS難度推定表 EASY",
+				"url": "http://walkure.net/hakkyou/for_glassist/bms/?lamp=easy"
+			},
+			{
+				"name": "発狂BMS難度推定表 NORMAL",
+				"url": "http://walkure.net/hakkyou/for_glassist/bms/?lamp=normal"
+			},
+			{
+				"name": "発狂BMS難度推定表 HARD",
+				"url": "http://walkure.net/hakkyou/for_glassist/bms/?lamp=hard"
+			},
+			{
+				"name": "発狂BMS難度推定表 HARD",
+				"url": "http://walkure.net/hakkyou/for_glassist/bms/?lamp=hard"
+			},
+			{
+				"name": "発狂BMS難度推定表 FC",
+				"url": "http://walkure.net/hakkyou/for_glassist/bms/?lamp=fc"
+			},
+			{
+				"name": "迷子のやどりぎ表",
+				"url": "http://kyotokara306km.at-ninja.jp/table2.html"
+			},
+			{
+				"name": "galaxy難易度表",
+				"url": "http://oneeighth.web.fc2.com/galaxy/list_sample.html"
+			},
+			{
+				"name": "Σ：3 」 ∠ )ﾐ⌒ゞ難易度表",
+				"url": "http://fuki1755.sitemix.jp/fox_table/fox_table.html"
+			}
+		]
+	},
+	"double": {
+		"fullname": "DP / 14keys",
+		"tables": [
+			{
+				"name": "発狂DP難易度表",
+				"url": "http://dpbmsdelta.web.fc2.com/table/insane.html"
+			},
+			{
+				"name": "δ難易度表",
+				"url": "http://dpbmsdelta.web.fc2.com/table/dpdelta.html"
+			},
+			{
+				"name": "発狂DPBMSごった煮難易度表",
+				"url": "http://yuyuyu.soudesune.net/DPgottani/insane2.html"
+			},
+			{
+				"name": "K BMS TABLE (DP)",
+				"url": "http://kdiff.web.fc2.com/dptable.html"
+			},
+			{
+				"name": "発狂14keyBMS闇鍋難易度表",
+				"url": "https://kenpel.github.io/objeCraft/table14/"
+			}
+		]
+	},
+	"pms": {
+		"fullname": "PMS / 9keys",
+		"tables": [
+			{
+				"name": "通常PMS難易度表",
+				"url": "http://hiiiii.web.fc2.com/pms/Table.htm"
+			},
+			{
+				"name": "発狂PMS難易度表",
+				"url": "http://stellawingroad.web.fc2.com/new/pms.html"
+			},
+			{
+				"name": "発狂PMS表外案内所",
+				"url": "http://stellawingroad.web.fc2.com/new2/pms.html"
+			},
+			{
+				"name": "発狂PMS表外案内所隔離枠",
+				"url": "http://stellawingroad.web.fc2.com/new3/pms.html"
+			},
+			{
+				"name": "準発狂PMS難易度表",
+				"url": "http://stellawingroad.web.fc2.com/new4/pms.html"
+			},
+			{
+				"name": "PMSデータベース",
+				"url": "http://pmsdifficulty.xxxxxxxx.jp/PMSdifficulty.html"
+			},
+			{
+				"name": "発狂PMSデータベース",
+				"url": "http://pmsdifficulty.xxxxxxxx.jp/insane_PMSdifficulty.html"
+			},
+			{
+				"name": "酸素PMS難易度表",
+				"url": "http://zatsuzatsupms.yokochou.com/jsonver/jsonindex.html"
+			},
+			{
+				"name": "西ヶ蜂難易度表",
+				"url": "http://nigo10sabun.web.fc2.com/nigo10json.html"
+			}
+		]
+	}
+}
