@@ -138,12 +138,18 @@ function get_time() {
 }
 function read_url($url)
 {
+	if($url === NULL) return NULL;
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	$data = curl_exec($ch);
+	$errno = curl_errno($ch);
+	$error = curl_error($ch);
 	curl_close($ch);
+	if (CURLE_OK !== $errno){
+		throw new RuntimeException($error, $errno);
+	}
 	return $data;
 }
 

@@ -395,7 +395,6 @@
 
 				function init() {
 					window.addEventListener( 'scroll', function( event ) {
-						console.log("scrolled");
 						if( !didScroll ) {
 							didScroll = true;
 							setTimeout( scrollPage, 250 );
