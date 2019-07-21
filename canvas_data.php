@@ -143,11 +143,6 @@ function read_url($url)
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	$data = curl_exec($ch);
-	if($data===FALSE){
-		$errmsg = curl_error($ch);
-		curl_close($ch);
-		throw new Exception($errmsg);
-	}
 	curl_close($ch);
 	return $data;
 }
