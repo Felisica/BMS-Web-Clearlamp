@@ -109,6 +109,7 @@
 						    <option value="http://akred.web.fc2.com/baecon-new.html">BAECON難易度表</option>
 						    <option value="http://kspinbms.web.fc2.com/insanetable.html">K-SPIN発狂難易度表</option>
 						    <option value="http://xyzzz.net/objxyz.php">obj.XYZ</option>
+						    <option value="https://c4nolab.web.fc2.com/c4nanido.html">C4難易度表</option>
 						    <option value="http://hogeeeeeee.ma-jide.com/outsideln.html">LN表外難易度</option>
 						    <option value="http://infinity.s60.xrea.com/bms/gla/">連打難易度表</option>
 						    <option value="http://kspinbms.web.fc2.com/insanetable.html">K-SPIN発狂難易度表</option>
